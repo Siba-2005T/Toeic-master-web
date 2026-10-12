@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Xem Lại & Lời Giải Chi Tiết - TOEIC Master</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 h-screen flex flex-col overflow-hidden selection:bg-brand-100 selection:text-brand-900">
+
+  <!-- TOP HEADER -->
+  <header class="h-16 bg-white border-b border-slate-200/80 px-4 sm:px-6 flex items-center justify-between z-30 flex-shrink-0 shadow-sm">
+    <div class="flex items-center gap-3">
+      <a id="btn-back-result" href="#" class="w-10 h-10 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors" title="Quay lại Báo cáo kết quả">
+        <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+      </a>
+      <div>
+        <h1 id="review-title" class="text-sm sm:text-base font-extrabold text-slate-900 truncate max-w-xs sm:max-w-md">
+          Xem lại đề thi
+        </h1>
+        <span class="text-[11px] font-semibold text-brand-600 flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">fact_check</span>
+          Chế độ tra cứu đáp án & Lời giải
+        </span>
+      </div>
+    </div>
+
+    <!-- Filter chips in header -->
+    <div class="flex items-center gap-1.5 overflow-x-auto scrollbar-none" id="review-filter-group">
+      <button data-filter="all" class="review-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-brand-800 text-white shadow-xs">
+        Tất cả (200)
+      </button>
+      <button data-filter="incorrect" class="review-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 text-rose-600 hover:bg-rose-50" id="filter-btn-incorrect">
+        Câu sai (0)
+      </button>
+      <button data-filter="correct" class="review-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 text-emerald-600 hover:bg-emerald-50" id="filter-btn-correct">
+        Câu đúng (0)
+      </button>
+      <button data-filter="unanswered" class="review-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-slate-100 text-slate-600 hover:bg-slate-200" id="filter-btn-unanswered">
+        Chưa làm (0)
+      </button>
+    </div>
+  </header>
+
+  <!-- SPLIT SCREEN -->
+  <main class="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+    
+    <!-- LEFT PANE: PDF VIEWER (Đề thi & Lời giải chi tiết) -->
+    <section class="w-full md:w-[58%] lg:w-[62%] h-1/2 md:h-full bg-slate-200 border-r border-slate-300/80 flex flex-col flex-shrink-0">
+      <!-- Toolbar -->
+      <div class="h-11 bg-white border-b border-slate-200 px-3 flex items-center justify-between flex-shrink-0 overflow-x-auto scrollbar-none">
+        <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg flex-shrink-0" id="review-pdf-tabs">
+          <button id="tab-review-lc" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all bg-white text-brand-800 shadow-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">headphones</span>
+            <span>Đề LC</span>
+          </button>
+          <button id="tab-review-rc" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">menu_book</span>
+            <span>Đề RC</span>
+          </button>
+          <button id="tab-review-expl-lc" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all text-emerald-700 hover:text-emerald-900 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">lightbulb</span>
+            <span>Giải LC</span>
+          </button>
+          <button id="tab-review-expl-rc" class="px-2.5 py-1 rounded-md text-xs font-bold transition-all text-emerald-700 hover:text-emerald-900 flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">auto_stories</span>
+            <span>Giải RC</span>
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <a id="btn-review-open-pdf" href="#" target="_blank" class="text-xs font-semibold text-slate-500 hover:text-brand-600 flex items-center gap-1" title="Mở file toàn màn hình">
+            <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+            <span class="hidden sm:inline">Toàn màn hình</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- PDF Frame -->
+      <div class="flex-1 w-full h-full relative bg-slate-700">
+        <iframe id="review-pdf-frame" class="w-full h-full border-none" src="about:blank"></iframe>
+      </div>
+    </section>
+
+    <!-- RIGHT PANE: AUDIO + REVIEW QUESTIONS LIST -->
+    <section class="w-full md:w-[42%] lg:w-[38%] h-1/2 md:h-full bg-white flex flex-col overflow-hidden">
+      
+      <!-- STICKY MINI AUDIO PLAYER -->
+      <div class="border-b border-slate-200 bg-slate-50/90 backdrop-blur p-3 flex flex-col gap-2 flex-shrink-0">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px] text-brand-600">headphones</span>
+            Audio Nghe Lại
+          </span>
+          <span class="text-xs font-semibold text-slate-500 tabular-nums" id="review-audio-time">00:00 / 00:00</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <input type="range" id="review-audio-progress" min="0" max="100" value="0" step="0.1" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-600"/>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5">
+            <button id="btn-review-rewind" class="w-8 h-8 rounded-lg hover:bg-slate-200/80 text-slate-700 flex items-center justify-center transition-colors">
+              <span class="material-symbols-outlined text-[18px]">replay_5</span>
+            </button>
+            <button id="btn-review-play" class="w-9 h-9 rounded-xl bg-brand-800 hover:bg-brand-700 text-white flex items-center justify-center shadow-sm transition-all active:scale-95">
+              <span class="material-symbols-outlined text-[20px]" id="icon-review-play">play_arrow</span>
+            </button>
+            <button id="btn-review-forward" class="w-8 h-8 rounded-lg hover:bg-slate-200/80 text-slate-700 flex items-center justify-center transition-colors">
+              <span class="material-symbols-outlined text-[18px]">forward_5</span>
+            </button>
+          </div>
+
+          <!-- Speed -->
+          <div class="flex items-center gap-1">
+            <button class="review-speed-btn px-2 py-0.5 rounded text-[11px] font-bold bg-brand-800 text-white" data-speed="1.0">1.0x</button>
+            <button class="review-speed-btn px-2 py-0.5 rounded text-[11px] font-bold bg-slate-200 text-slate-600" data-speed="1.2">1.2x</button>
+          </div>
+        </div>
+
+        <audio id="review-audio" preload="auto"></audio>
+      </div>
+
+      <!-- REVIEW QUESTIONS LIST -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3" id="review-questions-container">
+        <!-- Render danh sách câu hỏi -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/toeic-score.js"></script>
+  <script src="js/review.js"></script>
+</body>
+</html>

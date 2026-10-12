@@ -1,0 +1,11 @@
+{
+  "name": "toeic-master-web",
+  "version": "1.0.0",
+  "description": "Nền tảng luyện thi TOEIC thực chiến ETS 2024 & ETS 2025",
+  "scripts": {
+    "start": "python ../server.py"
+  },
+  "keywords": ["toeic", "ets", "exam-prep"],
+  "author": "",
+  "license": "MIT"
+}
