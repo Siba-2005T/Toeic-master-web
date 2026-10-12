@@ -2,12 +2,9 @@
  * Logic Trang chủ Dashboard (web_app/js/app.js)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Lấy cấu hình MEDIA_BASE_URL nếu có lưu trong localStorage
-  const savedMediaUrl = localStorage.getItem('toeic_media_base_url');
-  if (savedMediaUrl) {
-    window.MEDIA_BASE_URL = savedMediaUrl;
-  }
+document.addEventListener('DOMContentLoaded', async () => {
+  // Đợi nạp MEDIA_BASE_URL từ Vercel Environment Variables nếu có
+  if (window.mediaReadyPromise) await window.mediaReadyPromise;
 
   // Khởi tạo trạng thái
   let currentFilter = 'all';

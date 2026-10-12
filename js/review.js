@@ -2,9 +2,9 @@
  * Logic Trang Xem Lại & Lời Giải Chi Tiết (web_app/js/review.js)
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-  const savedMediaUrl = localStorage.getItem('toeic_media_base_url');
-  if (savedMediaUrl) window.MEDIA_BASE_URL = savedMediaUrl;
+document.addEventListener('DOMContentLoaded', async () => {
+  // Đợi nạp MEDIA_BASE_URL từ Vercel Environment Variables nếu có
+  if (window.mediaReadyPromise) await window.mediaReadyPromise;
 
   const urlParams = new URLSearchParams(window.location.search);
   const testId = urlParams.get('test') || 'ETS_2024_1';

@@ -3,9 +3,42 @@
  */
 
 // Cấu hình URL gốc của file Media (PDF & Audio)
-// Local: '' (dùng đường dẫn tương đối từ FastAPI/Static Server)
-// Vercel: Có thể trỏ tới Cloudflare R2 / Supabase / GitHub Releases
+// Mặc định rỗng, sẽ tự động nạp từ Vercel Environment Variables qua /api/config
 window.MEDIA_BASE_URL = window.MEDIA_BASE_URL || '';
+
+window.loadMediaBaseUrl = async function() {
+  // 1. Nếu là localhost, dùng '' (ưu tiên file nội bộ trong máy)
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    window.MEDIA_BASE_URL = '';
+    return '';
+  }
+
+  // 2. Nếu người dùng tự cấu hình thủ công trong localStorage
+  const saved = localStorage.getItem('toeic_media_base_url');
+  if (saved) {
+    window.MEDIA_BASE_URL = saved.trim().replace(/\/+$/, '');
+    return window.MEDIA_BASE_URL;
+  }
+
+  // 3. Tự động lấy từ Vercel Environment Variables (biến MEDIA_BASE_URL)
+  try {
+    const res = await fetch('/api/config');
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.mediaBaseUrl) {
+        window.MEDIA_BASE_URL = data.mediaBaseUrl.trim().replace(/\/+$/, '');
+        return window.MEDIA_BASE_URL;
+      }
+    }
+  } catch (e) {
+    console.warn('Không thể nạp cấu hình từ /api/config:', e);
+  }
+
+  return window.MEDIA_BASE_URL;
+};
+
+// Gọi ngay lập tức khi nạp data.js
+window.mediaReadyPromise = window.loadMediaBaseUrl();
 
 const TOEIC_TESTS = [
   // ===================== ETS 2024 =====================

@@ -3,9 +3,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Lấy MEDIA_BASE_URL từ localStorage nếu có
-  const savedMediaUrl = localStorage.getItem('toeic_media_base_url');
-  if (savedMediaUrl) window.MEDIA_BASE_URL = savedMediaUrl;
+  // Đợi nạp MEDIA_BASE_URL từ Vercel Environment Variables nếu có
+  if (window.mediaReadyPromise) await window.mediaReadyPromise;
 
   // Lấy ID đề thi từ URL
   const urlParams = new URLSearchParams(window.location.search);
