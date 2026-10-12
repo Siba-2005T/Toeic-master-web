@@ -22,12 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const statHighestScore = document.getElementById('stat-highest-score');
   const statAvgScore = document.getElementById('stat-avg-score');
 
-  // Modal Elements
-  const modalCloud = document.getElementById('modal-cloud');
-  const btnCloudConfig = document.getElementById('btn-cloud-config');
-  const closeModalCloud = document.getElementById('close-modal-cloud');
-  const inputMediaUrl = document.getElementById('input-media-url');
-  const btnSaveCloud = document.getElementById('btn-save-cloud');
+  // Reset button
   const btnResetHistory = document.getElementById('btn-reset-history');
 
   // Hàm tính toán thống kê
@@ -199,33 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderTests();
   });
 
-  // Xử lý Modal Cloud Config
-  btnCloudConfig.addEventListener('click', () => {
-    inputMediaUrl.value = localStorage.getItem('toeic_media_base_url') || '';
-    modalCloud.classList.remove('hidden');
-  });
 
-  closeModalCloud.addEventListener('click', () => {
-    modalCloud.classList.add('hidden');
-  });
-
-  modalCloud.addEventListener('click', (e) => {
-    if (e.target === modalCloud) modalCloud.classList.add('hidden');
-  });
-
-  btnSaveCloud.addEventListener('click', () => {
-    const val = inputMediaUrl.value.trim().replace(/\/+$/, '');
-    if (val) {
-      localStorage.setItem('toeic_media_base_url', val);
-      window.MEDIA_BASE_URL = val;
-      alert(`Đã lưu Media Base URL: ${val}`);
-    } else {
-      localStorage.removeItem('toeic_media_base_url');
-      window.MEDIA_BASE_URL = '';
-      alert('Đã thiết lập lại đường dẫn Media về mặc định (Local Server).');
-    }
-    modalCloud.classList.add('hidden');
-  });
 
   // Xóa toàn bộ lịch sử thi
   btnResetHistory.addEventListener('click', () => {
